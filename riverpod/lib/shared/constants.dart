@@ -12,7 +12,10 @@ class Constants {
   static const String kAccountsEndpoint = '/auth/get';
 
   // String constants
-  static const String kHeroImage = 'assets/images/flutter-hero.png';
+  static const String kHeroImage = 'assets/images/flutter-hero.webp';
+  static const String kPlaidLogo = 'assets/images/plaid-logo.png';
+  static const String kAuthIcon = 'assets/images/icon-auth.webp';
+  static const String kTransactionIcon = 'assets/images/icon-transactions.webp';
 
   // Attributes
   static const String kLinkTokenAttribute = 'link_token';

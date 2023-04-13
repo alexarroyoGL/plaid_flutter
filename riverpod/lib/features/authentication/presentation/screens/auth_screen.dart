@@ -1,35 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 import 'dart:async';
-import '/utils/strings.dart';
-import '/utils/constants.dart';
-import '/data/plaid_repository.dart';
+import '/shared/strings.dart';
+import '/shared/constants.dart';
+import '../providers/auth_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '/ui/transactions_screen.dart';
-import '/ui/accounts_screen.dart';
+import '../../../transactions/presentation/screens/transactions_screen.dart';
+import '../../../accounts/presentation/screens/accounts_screen.dart';
 
-// Repository provider
-final plaidRepositoryProvider = Provider<PlaidRepository>((ref) {
-  return PlaidRepository();
-});
-
-// Link token future provider
-final linkTokenFutureProvider = FutureProvider.autoDispose<String>((ref) {
-  // Get repository from the provider above
-  final plaidRepository = ref.watch(plaidRepositoryProvider);
-  // Call method that returns a Future<linkToken>
-  return plaidRepository.getLinkToken();
-});
-
-// App Widget
-class PlaidApp extends ConsumerStatefulWidget {
-  const PlaidApp({Key? key}) : super(key: key);
+// Auth Screen
+class AuthScreen extends ConsumerStatefulWidget {
+  const AuthScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<PlaidApp> createState() => _PlaidAppState();
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _PlaidAppState extends ConsumerState<PlaidApp> {
+class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   // Properties
   StreamSubscription<LinkExit>? _streamExit;
@@ -56,11 +43,12 @@ class _PlaidAppState extends ConsumerState<PlaidApp> {
   @override
   Widget build(BuildContext context) {
     // Getting the value of the provider
-    final linkTokenAsync = ref.watch(linkTokenFutureProvider);
+    final linkTokenAsync = ref.watch(linkTokenProvider);
 
     return Scaffold(
         appBar: AppBar(
-            title: Text(Strings.appTitle)
+          leading: Image.asset(Constants.kPlaidLogo),
+          leadingWidth: 100,
         ),
         body: Container(
           constraints: const BoxConstraints.expand(),
@@ -82,8 +70,8 @@ class _PlaidAppState extends ConsumerState<PlaidApp> {
   // Private methods
   Widget _buildOptions(String linkToken) {
     return Align(
-      alignment: Alignment.bottomRight,
-      child: Column(
+      alignment: Alignment.bottomLeft,
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           TextButton(
@@ -129,10 +117,9 @@ class _PlaidAppState extends ConsumerState<PlaidApp> {
     );
   }
 
-  void _onSuccess(LinkSuccess event) async {
+  void _onSuccess(LinkSuccess event)        {
     // Get access token
-    final repoProvider = ref.watch(plaidRepositoryProvider);
-    repoProvider.getAccessToken(event.publicToken);
+    ref.read(accessTokenProvider(event.publicToken));
 
     // Set public token
     setState(() => _publicToken = event.publicToken);

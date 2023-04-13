@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '/utils/strings.dart';
-import '../app.dart';
-import '../data/account.dart';
+import 'package:plaid/shared/constants.dart';
+import '../providers/accounts_providers.dart';
+import '/shared/strings.dart';
+import '../../../../shared/domain/models/account/account.dart';
+import '../../../../shared/widgets/list_item.dart';
 
-// Accounts future provider
-final accountsFutureProvider = FutureProvider.autoDispose<List<Account>>((ref) {
-  // Get repository from the provider above
-  final plaidRepository = ref.watch(plaidRepositoryProvider);
-  // Call method that returns a List<Account>
-  return plaidRepository.fetchAccounts();
-});
-
+// Accounts screen
 class AccountsScreen extends ConsumerWidget {
   const AccountsScreen({Key? key}) : super(key: key);
 
@@ -19,11 +14,12 @@ class AccountsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Getting accounts from provider
-    final accountsAsync = ref.watch(accountsFutureProvider);
+    final accountsAsync = ref.watch(accountsProvider);
 
     return Scaffold(
         appBar: AppBar(
           title: Text(Strings.accountsTitle),
+          centerTitle: true,
         ),
         body: accountsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
@@ -45,11 +41,10 @@ class AccountsScreen extends ConsumerWidget {
   }
 
   Widget _buildRow(Account account) {
-    return Card(
-      child: ListTile(
-          title: Text('Name: ${account.name}\nType: ${account.type}', style: const TextStyle(fontSize: 18.0)),
-          subtitle: Text('Available: ${account.available ?? '0'} - Current: ${account.current ?? '0'}')
-      ),
+    return ListItem(
+        title: 'Name: ${account.name}\nType: ${account.type}',
+        subtitle: 'Available: ${account.available ?? '0'} - Current: ${account.current ?? '0'}',
+        iconUrl: Constants.kAuthIcon
     );
   }
 

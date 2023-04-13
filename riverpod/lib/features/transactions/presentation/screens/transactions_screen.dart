@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '/utils/strings.dart';
-import '../app.dart';
-import '../data/transaction.dart';
+import '/shared/strings.dart';
+import '/shared/constants.dart';
+import '../providers/transactions_providers.dart';
+import '../../../../shared/domain/models/transaction/transaction.dart';
+import '../../../../shared/widgets/list_item.dart';
 
-// Transactions future provider
-final transactionsFutureProvider = FutureProvider.autoDispose<List<Transaction>>((ref) {
-  // Get repository from the provider above
-  final plaidRepository = ref.watch(plaidRepositoryProvider);
-  // Call method that returns a Future<List<Transaction>>
-  return plaidRepository.fetchTransactions();
-});
-
+// Transactions Screen
 class TransactionsScreen extends ConsumerWidget {
   const TransactionsScreen({Key? key}) : super(key: key);
 
@@ -19,11 +14,12 @@ class TransactionsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Getting transactions from provider
-    final transactionsAsync = ref.watch(transactionsFutureProvider);
+    final transactionsAsync = ref.watch(transactionsProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(Strings.transactionsTitle),
+        centerTitle: true,
       ),
       body: transactionsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -45,11 +41,10 @@ class TransactionsScreen extends ConsumerWidget {
   }
 
   Widget _buildRow(Transaction transaction) {
-    return Card(
-      child: ListTile(
-          title: Text('Merchant: ${transaction.merchantName}\nAmount: ${transaction.amount.toString()}', style: const TextStyle(fontSize: 18.0)),
-          subtitle: Text('Date: ${transaction.date} - Currency: ${transaction.currencyCode}')
-      ),
+    return ListItem(
+        title: 'Merchant: ${transaction.merchantName}\nAmount: ${transaction.amount.toString()}',
+        subtitle: 'Date: ${transaction.date} - Currency: ${transaction.currencyCode}',
+        iconUrl: Constants.kTransactionIcon
     );
   }
 

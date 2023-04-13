@@ -1,7 +1,7 @@
 class Strings {
-  static String appTitle = 'PLAID Sample';
+  static String appTitle = 'LINK';
   static String initializingLink = 'LINK AN ACCOUNT';
-  static String accounts = 'FETCH ACCOUNT INFO';
+  static String accounts = 'FETCH ACCOUNTS';
   static String transactions = 'FETCH TRANSACTIONS';
   static String transactionsTitle = 'Transactions';
   static String accountsTitle = 'Accounts';
