@@ -44,7 +44,7 @@ dependencies:
   # The following wraps platform-specific persistent storage for simple data.
   shared_preferences: ^2.0.20
 
-  flutter_riverpod: ^2.0.2
+  flutter_bloc: ^8.1.2
 
 dev_dependencies:
   flutter_test:

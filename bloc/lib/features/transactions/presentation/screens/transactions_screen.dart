@@ -1,31 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plaid/features/transactions/domain/cubits/transactions_cubit.dart';
 import '/shared/strings.dart';
 import '/shared/constants.dart';
-import '../providers/transactions_providers.dart';
 import '../../../../shared/domain/models/transaction/transaction.dart';
 import '../../../../shared/widgets/list_item.dart';
 
 // Transactions Screen
-class TransactionsScreen extends ConsumerWidget {
+class TransactionsScreen extends StatefulWidget {
   const TransactionsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<TransactionsScreen> createState() => _TransactionsScreenState();
+}
+
+class _TransactionsScreenState extends State<TransactionsScreen> {
 
   // Lifecycle methods
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Getting transactions from provider
-    final transactionsAsync = ref.watch(transactionsProvider);
+  void initState() {
+    super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final cubit = context.read<TransactionsCubit>();
+      cubit.fetchTransactions();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(Strings.transactionsTitle),
         centerTitle: true,
       ),
-      body: transactionsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
-        data: (transactions) => _buildTransactionList(transactions),
-      )
+      body: BlocBuilder<TransactionsCubit, TransactionsState>(
+        builder: (context, state) {
+          // Evaluating cubit states
+          if (state is InitTransactionsState || state is LoadingTransactionsState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is ResponseTransactionsState) {
+            final transactions = state.transactions;
+            return _buildTransactionList(transactions);
+          } else {
+            return const Center(child: Text('Error getting transactions'));
+          }
+        },
+      ),
     );
   }
 
@@ -47,5 +68,4 @@ class TransactionsScreen extends ConsumerWidget {
         iconUrl: Constants.kTransactionIcon
     );
   }
-
 }

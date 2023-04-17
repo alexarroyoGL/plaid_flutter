@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plaid/features/accounts/domain/cubits/accounts_cubit.dart';
+import 'package:plaid/features/accounts/presentation/screens/accounts_screen.dart';
+import 'package:plaid/features/authentication/domain/cubits/auth_cubit.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 import 'dart:async';
+import '../../../accounts/data/datasource/accounts_datasource.dart';
+import '../../../accounts/data/repositories/accounts_repository_impl.dart';
+import '../../../transactions/data/datasource/transactions_datasource.dart';
+import '../../../transactions/data/repositories/transactions_repository_impl.dart';
+import '../../../transactions/domain/cubits/transactions_cubit.dart';
 import '/shared/strings.dart';
 import '/shared/constants.dart';
-import '../providers/auth_providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../transactions/presentation/screens/transactions_screen.dart';
-import '../../../accounts/presentation/screens/accounts_screen.dart';
 
 // Auth Screen
-class AuthScreen extends ConsumerStatefulWidget {
+class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<AuthScreen> createState() => _AuthScreenState();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends ConsumerState<AuthScreen> {
+class _AuthScreenState extends State<AuthScreen> {
 
   // Properties
   StreamSubscription<LinkExit>? _streamExit;
@@ -31,6 +37,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
     _streamExit = PlaidLink.onExit.listen(_onExit);
     _streamSuccess = PlaidLink.onSuccess.listen(_onSuccess);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final cubit = context.read<AuthCubit>();
+      cubit.getLinkToken();
+    });
   }
 
   @override
@@ -42,9 +53,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Getting the value of the provider
-    final linkTokenAsync = ref.watch(linkTokenProvider);
-
     return Scaffold(
         appBar: AppBar(
           leading: Image.asset(Constants.kPlaidLogo),
@@ -58,11 +66,19 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 fit: BoxFit.fitHeight
             ),
           ),
-          child: linkTokenAsync.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (err, stack) => Center(child: Text('Error: $err')),
-            data: (linkToken) => _buildOptions(linkToken),
-          )
+          child: BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              // Evaluating cubit states
+              if (state is InitAuthState || state is LoadingAuthState) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is ResponseAuthState) {
+                final linkToken = state.linkToken;
+                return _buildOptions(linkToken);
+              } else {
+                return const Center(child: Text('Error getting link token'));
+              }
+            },
+          ),
         )
     );
   }
@@ -89,7 +105,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               onPressed: _publicToken != null ? () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: ((context) => const AccountsScreen()),
+                    builder: ((context) {
+                      return BlocProvider(
+                        create: (context) => AccountsCubit(AccountsRepositoryImpl(AccountsDataSourceImpl())),
+                        child: const AccountsScreen(),
+                      );
+                    }),
                   ),
                 );
               } : null,
@@ -102,7 +123,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
               onPressed: _publicToken != null ? () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: ((context) => const TransactionsScreen()),
+                    builder: ((context) {
+                      return BlocProvider(
+                        create: (context) => TransactionsCubit(TransactionsRepositoryImpl(TransactionsDataSourceImpl())),
+                        child: const TransactionsScreen(),
+                      );
+                    }),
                   ),
                 );
               } : null,
@@ -117,12 +143,13 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     );
   }
 
-  void _onSuccess(LinkSuccess event)        {
-    // Get access token
-    ref.read(accessTokenProvider(event.publicToken));
-
+  void _onSuccess(LinkSuccess event) {
     // Set public token
     setState(() => _publicToken = event.publicToken);
+
+    // Get access token
+    final cubit = context.read<AuthCubit>();
+    cubit.getAccessToken(publicToken: event.publicToken);
   }
 
   void _onExit(LinkExit event) {

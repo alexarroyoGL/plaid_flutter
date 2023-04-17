@@ -1,36 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:plaid/features/accounts/domain/cubits/accounts_cubit.dart';
 import 'package:plaid/shared/constants.dart';
-import '../providers/accounts_providers.dart';
 import '/shared/strings.dart';
 import '../../../../shared/domain/models/account/account.dart';
 import '../../../../shared/widgets/list_item.dart';
 
 // Accounts screen
-class AccountsScreen extends ConsumerWidget {
+class AccountsScreen extends StatefulWidget {
   const AccountsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AccountsScreen> createState() => _AccountsScreenState();
+}
+
+class _AccountsScreenState extends State<AccountsScreen> {
 
   // Lifecycle methods
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Getting accounts from provider
-    final accountsAsync = ref.watch(accountsProvider);
+  void initState() {
+    super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final cubit = context.read<AccountsCubit>();
+      cubit.fetchAccounts();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text(Strings.accountsTitle),
           centerTitle: true,
         ),
-        body: accountsAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, stack) => Center(child: Text('Error: $err')),
-          data: (transactions) => _buildTransactionList(transactions),
-        )
+        body: BlocBuilder<AccountsCubit, AccountsState>(
+          builder: (context, state) {
+            // Evaluating cubit states
+            if (state is InitAccountsState || state is LoadingAccountsState) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ResponseAccountsState) {
+              final accounts = state.accounts;
+              return _buildAccountList(accounts);
+            } else {
+              return const Center(child: Text('Error getting accounts'));
+            }
+          },
+        ),
     );
   }
 
   // Private methods
-  Widget _buildTransactionList(List<Account> accounts) {
+  Widget _buildAccountList(List<Account> accounts) {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemCount: accounts.length,
@@ -47,7 +68,6 @@ class AccountsScreen extends ConsumerWidget {
         iconUrl: Constants.kAuthIcon
     );
   }
-
 }
 
 
