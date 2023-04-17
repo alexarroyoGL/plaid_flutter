@@ -1,9 +1,9 @@
 PODS:
   - Flutter (1.0.0)
-  - Plaid (4.1.0)
+  - Plaid (4.2.0)
   - plaid_flutter (0.0.1):
     - Flutter
-    - Plaid (= 4.1.0)
+    - Plaid (= 4.2.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -27,10 +27,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  Plaid: 7d340abeadb46c7aa1a91f896c5b22395a31fcf2
-  plaid_flutter: dcbd586bb7c76f04d8f3604915facbe79f90f637
+  Plaid: 3887bb7a223129433dd70cc03aebd73e3740d03d
+  plaid_flutter: 84f29214cc0ce717d62041811b6ccc7a9be0c84c
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
 
-PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 
 COCOAPODS: 1.12.0

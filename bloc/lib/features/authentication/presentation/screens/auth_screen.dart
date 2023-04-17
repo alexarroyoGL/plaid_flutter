@@ -86,7 +86,7 @@ class _AuthScreenState extends State<AuthScreen> {
   // Private methods
   Widget _buildOptions(String linkToken) {
     return Align(
-      alignment: Alignment.bottomLeft,
+      alignment: Alignment.topLeft,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
