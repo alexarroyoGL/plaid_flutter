@@ -4,7 +4,7 @@ import '../datasource/transactions_datasource.dart';
 
 class TransactionsRepositoryImpl extends TransactionsRepository {
   // Properties
-  final TransactionsDataSourceImpl dataSource;
+  final TransactionsDataSource dataSource;
 
   // Constructor
   TransactionsRepositoryImpl(this.dataSource);

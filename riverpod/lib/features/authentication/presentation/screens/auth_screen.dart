@@ -42,9 +42,6 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Getting the value of the provider
-    final linkTokenAsync = ref.watch(linkTokenProvider);
-
     return Scaffold(
         appBar: AppBar(
           leading: Image.asset(Constants.kPlaidLogo),
@@ -58,7 +55,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 fit: BoxFit.fitHeight
             ),
           ),
-          child: linkTokenAsync.when(
+          child: ref.watch(linkTokenProvider).when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (err, stack) => Center(child: Text('Error: $err')),
             data: (linkToken) => _buildOptions(linkToken),
@@ -70,7 +67,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   // Private methods
   Widget _buildOptions(String linkToken) {
     return Align(
-      alignment: Alignment.bottomLeft,
+      alignment: Alignment.topLeft,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

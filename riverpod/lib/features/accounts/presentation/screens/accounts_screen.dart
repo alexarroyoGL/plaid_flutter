@@ -13,24 +13,21 @@ class AccountsScreen extends ConsumerWidget {
   // Lifecycle methods
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Getting accounts from provider
-    final accountsAsync = ref.watch(accountsProvider);
-
     return Scaffold(
         appBar: AppBar(
           title: Text(Strings.accountsTitle),
           centerTitle: true,
         ),
-        body: accountsAsync.when(
+        body: ref.watch(accountsProvider).when(
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, stack) => Center(child: Text('Error: $err')),
-          data: (transactions) => _buildTransactionList(transactions),
+          data: (transactions) => _buildAccountList(transactions),
         )
     );
   }
 
   // Private methods
-  Widget _buildTransactionList(List<Account> accounts) {
+  Widget _buildAccountList(List<Account> accounts) {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemCount: accounts.length,

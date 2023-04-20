@@ -82,7 +82,7 @@
         <entry key="flutter_riverpod">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_riverpod-2.3.4/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_riverpod-2.3.5/lib" />
             </list>
           </value>
         </entry>
@@ -208,7 +208,7 @@
         <entry key="riverpod">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/riverpod-2.3.4/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/riverpod-2.3.5/lib" />
             </list>
           </value>
         </entry>
@@ -222,7 +222,7 @@
         <entry key="shared_preferences_android">
           <value>
             <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_android-2.1.0/lib" />
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_android-2.1.2/lib" />
             </list>
           </value>
         </entry>
@@ -358,7 +358,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/ffi-2.0.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/file-6.1.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_lints-2.0.1/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_riverpod-2.3.4/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/flutter_riverpod-2.3.5/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/http-0.13.5/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/http_parser-4.0.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/js-0.6.5/lib" />
@@ -374,9 +374,9 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/platform-3.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.4/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/process-4.2.4/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/riverpod-2.3.4/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/riverpod-2.3.5/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences-2.1.0/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_android-2.1.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_android-2.1.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_foundation-2.2.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_linux-2.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/shared_preferences_platform_interface-2.2.0/lib" />

@@ -13,15 +13,12 @@ class TransactionsScreen extends ConsumerWidget {
   // Lifecycle methods
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Getting transactions from provider
-    final transactionsAsync = ref.watch(transactionsProvider);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(Strings.transactionsTitle),
         centerTitle: true,
       ),
-      body: transactionsAsync.when(
+      body: ref.watch(transactionsProvider).when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
         data: (transactions) => _buildTransactionList(transactions),

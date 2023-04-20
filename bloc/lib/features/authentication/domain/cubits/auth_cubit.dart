@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import '../../data/repositories/auth_repository_impl.dart';
+import '../repositories/auth_repository.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   // Properties
-  final AuthRepositoryImpl _repository;
+  final AuthRepository _repository;
 
   // Constructor
   AuthCubit(this._repository) : super(InitAuthState());

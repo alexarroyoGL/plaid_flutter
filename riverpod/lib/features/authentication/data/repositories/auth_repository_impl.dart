@@ -4,7 +4,7 @@ import '../datasource/auth_datasource.dart';
 class AuthRepositoryImpl extends AuthRepository {
 
   // Properties
-  final AuthDataSourceImpl dataSource;
+  final AuthDataSource dataSource;
 
   // Constructor
   AuthRepositoryImpl(this.dataSource);

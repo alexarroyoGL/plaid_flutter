@@ -4,7 +4,7 @@ import '../datasource/accounts_datasource.dart';
 
 class AccountsRepositoryImpl extends AccountsRepository {
   // Properties
-  final AccountsDataSourceImpl dataSource;
+  final AccountsDataSource dataSource;
 
   // Constructor
   AccountsRepositoryImpl(this.dataSource);
